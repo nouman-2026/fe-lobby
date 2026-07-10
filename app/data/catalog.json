@@ -1,16 +1,6 @@
 {
   "games": [
     {
-      "id": "retro-riches",
-      "title": "Retro Riches",
-      "slug": "retro-riches",
-      "thumbnail": "https://cdn.ninjagaming.org/storage/games/spN1UP3BhMPWFE6BxFixL10JKgE9BCHCyIDP2mYs.png",
-      "category": "slots",
-      "isNew": false,
-      "provider": "NG",
-      "status": "active"
-    },
-    {
       "id": "popcorn-madness",
       "title": "Popcorn Madness",
       "slug": "popcorn-madness",

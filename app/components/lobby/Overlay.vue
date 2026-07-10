@@ -22,19 +22,21 @@ function onSelect(gameId: string) {
     aria-label="Game lobby"
   >
     <header
-      class="flex flex-col gap-3 border-b border-zinc-800/80 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4"
+      class="flex items-center justify-between gap-3 border-b border-zinc-800/80 px-4 py-3 sm:px-6 sm:py-4"
     >
-      <div class="min-w-0">
+      <div class="min-w-0 flex-1">
         <h2
-          class="truncate text-lg font-bold tracking-tight text-white sm:text-xl"
+          class="truncate text-base font-bold tracking-tight text-white sm:text-xl"
         >
           {{ activeLabel }}
         </h2>
-        <p class="text-xs text-zinc-400 sm:text-sm">Select a title to launch</p>
+        <p class="truncate text-[11px] text-zinc-400 sm:text-sm">
+          Select a title to launch
+        </p>
       </div>
 
       <div
-        class="flex shrink-0 self-start rounded-lg border border-zinc-700 bg-zinc-900/50 p-0.5 sm:self-auto"
+        class="flex shrink-0 rounded-lg border border-zinc-700 bg-zinc-900/50 p-0.5"
       >
         <button
           type="button"

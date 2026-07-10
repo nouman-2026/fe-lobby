@@ -35,7 +35,7 @@ function launch(gameId: string) {
       v-for="game in filteredGames"
       :key="game.id"
       type="button"
-      class="group relative overflow-hidden rounded-xl border border-slate-800 bg-zinc-900 text-left transition duration-300 hover:border-amber-400/30 hover:shadow-lg hover:shadow-amber-400/10"
+      class="group relative min-w-0 overflow-hidden rounded-xl border border-slate-800 bg-zinc-900 text-left transition duration-300 hover:border-amber-400/30 hover:shadow-lg hover:shadow-amber-400/10"
       :class="
         layoutMode === 'list'
           ? 'flex items-center gap-3 rounded-lg p-2 sm:gap-4 sm:rounded-xl sm:p-3'
@@ -75,7 +75,10 @@ function launch(gameId: string) {
         </div>
 
         <div class="min-w-0 flex-1">
-          <h3 class="truncate text-sm font-bold text-white sm:text-base">
+          <h3
+            class="truncate text-sm font-bold text-white sm:text-base"
+            :title="game.title"
+          >
             {{ game.title }}
           </h3>
           <p class="text-xs capitalize text-zinc-400">{{ game.category }}</p>
@@ -121,7 +124,7 @@ function launch(gameId: string) {
           </span>
         </div>
 
-        <div class="relative z-[1] flex h-full flex-col justify-end p-3 sm:p-4">
+        <div class="relative z-[1] flex h-full min-w-0 flex-col justify-end p-3 sm:p-4">
           <span
             v-if="game.isNew"
             class="mb-auto inline-flex w-fit rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-400"
@@ -129,12 +132,15 @@ function launch(gameId: string) {
             New
           </span>
 
-          <h3 class="text-xs font-bold text-white sm:text-sm md:text-base">
+          <h3
+            class="truncate text-xs font-bold text-white sm:text-sm md:text-base"
+            :title="game.title"
+          >
             {{ game.title }}
           </h3>
-          <p class="text-[10px] capitalize text-white/70 sm:text-xs">
+          <!-- <p class="text-[10px] capitalize text-white/70 sm:text-xs">
             {{ game.provider }}
-          </p>
+          </p> -->
         </div>
       </template>
     </button>

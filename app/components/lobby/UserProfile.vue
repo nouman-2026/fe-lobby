@@ -28,11 +28,7 @@ const initials = computed(() => getAvatarInitials(userProfile.username))
     <div class="min-w-0">
       <p
         class="truncate font-semibold text-white"
-        :class="
-          compact
-            ? 'max-w-[6rem] text-xs sm:max-w-[8rem] sm:text-sm'
-            : 'text-sm'
-        "
+        :class="compact ? 'max-w-[4.5rem] text-xs' : 'text-sm'"
       >
         {{ userProfile.username }}
       </p>
