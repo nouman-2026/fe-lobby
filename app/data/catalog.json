@@ -1,64 +1,164 @@
 {
   "games": [
     {
-      "id": "dede5000-santa",
-      "title": "Dede 5000 Santa",
-      "slug": "dede5000-santa",
-      "thumbnail": "https://cdn.ninjagaming.org/storage/games/ct6sxRnWkBFcAOdl0bJ09LS5HXznJkQnB9U5Opd7.gif",
-      "category": "slots",
-      "isNew": true,
-      "provider": "NG",
-      "version": "1.0.0",
-      "status": "active",
-      "launchUrl": "https://example.com/games/dede5000-santa"
-    },
-    {
-      "id": "johns-fortune",
-      "title": "Johns Fortune",
-      "slug": "johns-fortune",
-      "thumbnail": "https://cdn.ninjagaming.org/storage/games/ej8XxnKF52nzB7qpMVYuBSmcsT8teCgVzDiqlDh5.png",
+      "id": "retro-riches",
+      "title": "Retro Riches",
+      "slug": "retro-riches",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/spN1UP3BhMPWFE6BxFixL10JKgE9BCHCyIDP2mYs.png",
       "category": "slots",
       "isNew": false,
       "provider": "NG",
-      "version": "1.0.0",
-      "status": "active",
-      "launchUrl": "https://example.com/games/johns-fortune"
+      "status": "active"
     },
     {
-      "id": "magic-princess",
-      "title": "Magic Princess",
-      "slug": "magic-princess",
-      "thumbnail": "https://cdn.ninjagaming.org/storage/games/7syiFlt8QKyIj0p3o2ZgA6pRYbecwBc7RH5wbZIr.png",
-      "category": "slots",
-      "isNew": true,
-      "provider": "NG",
-      "version": "1.0.0",
-      "status": "active",
-      "launchUrl": "https://example.com/games/magic-princess"
-    },
-    {
-      "id": "ocean-fish",
-      "title": "Ocean Fish",
-      "slug": "ocean-fish",
-      "thumbnail": "https://cdn.ninjagaming.org/storage/games/CHWyZuct7EbumcRRUJKiElKbhZRx1GXih9D4gj1C.png",
+      "id": "popcorn-madness",
+      "title": "Popcorn Madness",
+      "slug": "popcorn-madness",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/WQFRqs78NElXQ9hprfGC0Cjgf7Ak6jy3JFFDWhli.png",
       "category": "slots",
       "isNew": false,
       "provider": "NG",
-      "version": "1.0.0",
-      "status": "active",
-      "launchUrl": "https://example.com/games/ocean-fish"
+      "status": "active"
+    },
+    {
+      "id": "royal-bonanza",
+      "title": "Royal Bonanza",
+      "slug": "royal-bonanza",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/FOOujgy6uu6Bs39jm0KFwoOcsKka8uqIkzASMmpu.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "wonder-bonanza-1000",
+      "title": "Wonder Bonanza 1000",
+      "slug": "wonder-bonanza-1000",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/lSjQZpvFGUfJGROS2PxYAHp2pLkAqstBXqpmfkht.png",
+      "category": "slots",
+      "isNew": true,
+      "provider": "NG",
+      "status": "active"
     },
     {
       "id": "dede5000",
       "title": "Dede 5000",
       "slug": "dede5000",
-      "thumbnail": "https://cdn.ninjagaming.org/storage/games/oyaFiKkHQGtBetYkQaSSzjY8Iq0u1rvakdtaQbFM.gif",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/tgpvZVgl3MPFjbX1RitNNmCriiC65AcKEhc9ULYM.png",
       "category": "slots",
       "isNew": true,
       "provider": "NG",
-      "version": "1.0.0",
-      "status": "active",
-      "launchUrl": "https://example.com/games/dede5000"
+      "status": "active"
+    },
+    {
+      "id": "aztec-mystique",
+      "title": "Aztec Mystique",
+      "slug": "aztec-mystique",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/KZ8EDXGLvSF9JE0SYtgXZXI2pV6BU2phZKZRuu95.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "grumpy-grandpa",
+      "title": "Grumpy Grandpa",
+      "slug": "grumpy-grandpa",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/dIbupOGwBTEpkqbr3XTIbMuPkcy9sbKIihIpq3dx.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "dede5000-santa",
+      "title": "Dede 5000 Santa",
+      "slug": "dede5000-santa",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/RwfzbSx7TJxJhgPvUi1xCZ5xezkn62SVNajxfqnm.png",
+      "category": "slots",
+      "isNew": true,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "space-fortune",
+      "title": "Space Fortune",
+      "slug": "space-fortune",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/78R7lCUbst7rSHDycZp1JCsk7nmprbkvtA5OanzK.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "cash-bandicoot",
+      "title": "Cash Bandicoot",
+      "slug": "cash-bandicoot",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/nbZS6btbjiULHjgVZaAOcxZ6xh8bTgOrrt9S47oj.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "ninja-clan",
+      "title": "Ninja Clan",
+      "slug": "ninja-clan",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/r94gFLvIrv91z2ENm6zT9kTzhO2DdXFCBHiDCKJ6.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "pepper-party",
+      "title": "Pepper Party",
+      "slug": "pepper-party",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/7Q9BuHMsP4qkqvkw6xeQRxfSJIwMHdTuDuE9rPb4.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "magic-princess-5000",
+      "title": "Magic Princess 5000",
+      "slug": "magic-princess-5000",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/pSYQQLaR9lVzTp1x7oM0NgUaTcEdqfgcbAfSd0So.jpg",
+      "category": "slots",
+      "isNew": true,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "spinx-club",
+      "title": "Spinx Club",
+      "slug": "spinx-club",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/IeByzJxPKkgpkoQT7yAQOMtF92ICQkkNusCVQ83l.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "riches-of-valhall",
+      "title": "Riches Of Valhalla",
+      "slug": "riches-of-valhall",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/iUv3AdRxXWaftalAcUkoKIngs29JUGcGsCQwkUKU.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active"
+    },
+    {
+      "id": "strike-zone",
+      "title": "Strike Zone",
+      "slug": "strike-zone",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/djFYeaGNdJFXicOY9HFKA1unA8ajYCVUc7iMam8f.png",
+      "category": "crash",
+      "isNew": true,
+      "provider": "NG",
+      "status": "active"
     }
   ]
 }

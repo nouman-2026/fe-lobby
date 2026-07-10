@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { sidebarNavItems } from "~/data/games";
+import { sidebarNavItems } from '~/data/games'
 
-const settings = useSettingsStore();
+const settings = useSettingsStore()
 
 const activeLabel = computed(
   () =>
     sidebarNavItems.find((item) => item.id === settings.activeCategory)
-      ?.label ?? "All Games",
-);
+      ?.label ?? 'All Games'
+)
 
 function onSelect(gameId: string) {
-  settings.openGame(gameId);
+  settings.openGame(gameId)
 }
 </script>
 
@@ -34,31 +34,33 @@ function onSelect(gameId: string) {
       </div>
 
       <div
-        class="flex shrink-0 rounded-lg border border-zinc-700 p-0.5 self-start sm:self-auto"
+        class="flex shrink-0 self-start rounded-lg border border-zinc-700 bg-zinc-900/50 p-0.5 sm:self-auto"
       >
         <button
           type="button"
-          class="rounded-md px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition sm:px-3 sm:text-xs"
+          class="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition sm:px-3 sm:text-xs"
           :class="
             settings.layoutMode === 'grid'
-              ? 'bg-zinc-700 text-white'
+              ? 'bg-zinc-700 text-amber-400 shadow-sm'
               : 'text-zinc-400 hover:text-white'
           "
           @click="settings.setLayoutMode('grid')"
         >
-          Grid
+          <Icon name="mdi:view-grid-outline" size="14" />
+          <span>Grid</span>
         </button>
         <button
           type="button"
-          class="rounded-md px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition sm:px-3 sm:text-xs"
+          class="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide transition sm:px-3 sm:text-xs"
           :class="
             settings.layoutMode === 'list'
-              ? 'bg-zinc-700 text-white'
+              ? 'bg-zinc-700 text-amber-400 shadow-sm'
               : 'text-zinc-400 hover:text-white'
           "
           @click="settings.setLayoutMode('list')"
         >
-          List
+          <Icon name="mdi:view-list" size="14" />
+          <span>List</span>
         </button>
       </div>
     </header>

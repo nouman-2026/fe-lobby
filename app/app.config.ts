@@ -1,6 +1,6 @@
 export default defineAppConfig({
   icon: {
-    size: "18px",
-    class: "",
+    size: '18px',
+    class: '',
   },
-});
+})

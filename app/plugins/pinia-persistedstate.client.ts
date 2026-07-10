@@ -1,9 +1,9 @@
-import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 export default defineNuxtPlugin({
-  name: "pinia-plugin-persistedstate",
-  dependsOn: ["pinia"],
+  name: 'pinia-plugin-persistedstate',
+  dependsOn: ['pinia'],
   setup() {
-    usePinia().use(piniaPluginPersistedstate);
+    usePinia().use(piniaPluginPersistedstate)
   },
-});
+})

@@ -1,52 +1,6 @@
-[
-  {
-    "id": "dede5000-santa",
-    "title": "Dede 5000 Santa",
-    "slug": "dede5000-santa",
-    "thumbnail": "https://cdn.ninjagaming.org/storage/games/ct6sxRnWkBFcAOdl0bJ09LS5HXznJkQnB9U5Opd7.gif",
-    "version": "1.0.0",
-    "fileName": "dede-5000-santa.zip",
-    "provider": "NG",
-    "status": "active"
-  },
-  {
-    "id": "johns-fortune",
-    "title": "Johns Fortune",
-    "slug": "johns-fortune",
-    "thumbnail": "https://cdn.ninjagaming.org/storage/games/ej8XxnKF52nzB7qpMVYuBSmcsT8teCgVzDiqlDh5.png",
-    "version": "1.0.0",
-    "fileName": "johns-fortune.zip",
-    "provider": "NG",
-    "status": "active"
-  },
-  {
-    "id": "magic-princess",
-    "title": "Magic Princess",
-    "slug": "magic-princess",
-    "thumbnail": "https://cdn.ninjagaming.org/storage/games/7syiFlt8QKyIj0p3o2ZgA6pRYbecwBc7RH5wbZIr.png",
-    "version": "1.0.0",
-    "fileName": "magic-princess.zip",
-    "provider": "NG",
-    "status": "active"
-  },
-  {
-    "id": "ocean-fish",
-    "title": "Ocean Fish",
-    "slug": "ocean-fish",
-    "thumbnail": "https://cdn.ninjagaming.org/storage/games/CHWyZuct7EbumcRRUJKiElKbhZRx1GXih9D4gj1C.png",
-    "version": "1.0.0",
-    "fileName": "ocean-fish.zip",
-    "provider": "NG",
-    "status": "active"
-  },
-  {
-    "id": "dede5000",
-    "title": "Dede 5000",
-    "slug": "dede5000",
-    "thumbnail": "https://cdn.ninjagaming.org/storage/games/oyaFiKkHQGtBetYkQaSSzjY8Iq0u1rvakdtaQbFM.gif",
-    "version": "1.0.0",
-    "fileName": "dede-5000.zip",
-    "provider": "NG",
-    "status": "active"
-  }
-]
+{
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5"
+}

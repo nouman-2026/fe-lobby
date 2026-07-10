@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const settings = useSettingsStore();
+const settings = useSettingsStore()
 </script>
 
 <template>
@@ -8,9 +8,10 @@ const settings = useSettingsStore();
   >
     <!-- Mobile top bar with logo -->
     <header
-      class="flex shrink-0 items-center border-b border-zinc-800/80 bg-[#1a1a1a] px-4 py-3 lg:hidden"
+      class="flex shrink-0 items-center justify-between gap-3 border-b border-zinc-800/80 bg-[#1a1a1a] px-4 py-3 lg:hidden"
     >
-      <img src="/logo.svg" alt="Logo" class="h-6 w-auto" />
+      <img src="/logo.svg" alt="Logo" class="h-6 w-auto shrink-0" />
+      <LobbyUserProfile compact />
     </header>
 
     <LobbySidebar />
