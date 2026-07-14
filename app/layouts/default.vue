@@ -17,7 +17,7 @@ const settings = useSettingsStore()
         :aria-expanded="settings.mobileSidebarOpen"
         @click="settings.openMobileSidebar()"
       >
-        <Icon name="uis:list-ul" size="34" />
+        <Icon name="solar:list-bold" size="34" />
       </button>
 
       <img
