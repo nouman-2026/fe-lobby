@@ -66,7 +66,7 @@ function onBackdropClick() {
         v-for="item in navItems"
         :key="item.id"
         type="button"
-        class="nav-item relative flex w-full items-center gap-3 rounded-xl py-2.5 pl-4 pr-3 text-left text-sm font-medium transition duration-200"
+        class="nav-item relative flex w-full items-center gap-3 rounded-xl py-2.5 pl-4 pr-3 text-left text-sm font-semibold transition duration-200"
         :class="
           isActive(item.id)
             ? 'nav-item--active text-white'
@@ -98,7 +98,7 @@ function onBackdropClick() {
       v-for="item in navItems"
       :key="item.id"
       type="button"
-      class="mobile-nav-item relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-medium transition duration-200 sm:text-xs"
+      class="mobile-nav-item relative flex min-w-0 flex-1 flex-col items-center gap-1 rounded-2xl px-1 py-2 text-[10px] font-semibold transition duration-200 sm:text-xs"
       :class="
         isActive(item.id)
           ? 'mobile-nav-item--active text-white'

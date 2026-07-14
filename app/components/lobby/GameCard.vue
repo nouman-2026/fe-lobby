@@ -126,7 +126,7 @@ function onSelect() {
 
       <div class="min-w-0 flex-1">
         <h3
-          class="truncate text-sm font-bold text-white sm:text-base"
+          class="truncate text-sm font-semibold text-white sm:text-base"
           :title="game.title"
         >
           {{ game.title }}
@@ -182,7 +182,7 @@ function onSelect() {
 
       <div class="px-3 py-2 sm:px-4 sm:py-3">
         <h3
-          class="truncate text-xs font-bold text-white sm:text-sm md:text-base"
+          class="truncate text-xs font-semibold text-white sm:text-sm md:text-base"
           :title="game.title"
         >
           {{ game.title }}

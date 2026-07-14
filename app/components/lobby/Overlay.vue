@@ -39,7 +39,7 @@ function onSelect(gameId: string) {
     >
       <div class="min-w-0 flex-1">
         <h2
-          class="truncate text-base font-bold tracking-tight text-white sm:text-xl"
+          class="truncate text-base font-semibold tracking-tight text-white sm:text-xl"
         >
           {{ activeLabel }}
         </h2>
