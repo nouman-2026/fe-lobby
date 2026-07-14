@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   devServer: {
     port: 4500,
   },
+  css: ['~/assets/css/main.css'],
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/tailwindcss',
@@ -12,6 +13,17 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/image',
   ],
+  tailwindcss: {
+    config: {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Montserrat', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    },
+  },
   app: {
     head: {
       link: [{ rel: 'preconnect', href: 'https://cdn.ninjagaming.org' }],

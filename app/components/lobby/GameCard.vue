@@ -53,7 +53,7 @@ function onSelect() {
     :class="
       layoutMode === 'list'
         ? 'flex w-full items-center gap-3 rounded-lg p-2 sm:gap-4 sm:rounded-xl sm:p-3'
-        : 'aspect-[4/5]'
+        : 'flex w-full flex-col'
     "
     @click="onSelect"
   >
@@ -83,17 +83,9 @@ function onSelect() {
 
       <template v-else>
         <div class="flex h-full animate-pulse flex-col">
-          <div class="min-h-0 flex-1 bg-zinc-800" />
-          <div
-            class="bg-gradient-to-t from-zinc-900 via-zinc-900/80 to-transparent p-3 sm:p-4"
-          >
-            <div class="space-y-3">
-              <div class="grid grid-cols-3 gap-4">
-                <div class="col-span-2 h-2 rounded bg-zinc-700" />
-                <div class="col-span-1 h-2 rounded bg-zinc-700" />
-              </div>
-              <div class="h-2 w-2/3 rounded bg-zinc-700" />
-            </div>
+          <div class="aspect-[4/5] w-full bg-zinc-800" />
+          <div class="space-y-2 p-3 sm:p-4">
+            <div class="h-2 w-2/3 rounded bg-zinc-700" />
           </div>
         </div>
       </template>
@@ -151,44 +143,44 @@ function onSelect() {
     </template>
 
     <template v-else>
-      <img
-        ref="imgRef"
-        :src="game.thumbnail"
-        :alt="game.title"
-        width="512"
-        height="640"
-        class="absolute inset-0 h-full w-full object-contain transition duration-500 group-hover:scale-110"
-        :loading="eager ? 'eager' : 'lazy'"
-        decoding="async"
-        @load="onLoaded"
-        @error="onLoaded"
-      />
+      <div class="relative aspect-[4/5] w-full overflow-hidden">
+        <img
+          ref="imgRef"
+          :src="game.thumbnail"
+          :alt="game.title"
+          width="512"
+          height="640"
+          class="h-full w-full object-contain transition duration-500 group-hover:scale-110"
+          :loading="eager ? 'eager' : 'lazy'"
+          decoding="async"
+          @load="onLoaded"
+          @error="onLoaded"
+        />
 
-      <div
-        class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/30 opacity-0 backdrop-blur-0 transition-all duration-300 group-hover:bg-black/40 group-hover:opacity-100 group-hover:backdrop-blur-md"
-      >
-        <span
-          class="play-pulse flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 text-black shadow-xl shadow-amber-400/50 ring-4 ring-amber-400/25 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12"
+        <div
+          class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-2 bg-black/30 opacity-0 backdrop-blur-0 transition-all duration-300 group-hover:bg-black/40 group-hover:opacity-100 group-hover:backdrop-blur-md"
         >
-          <Icon name="mdi:play" size="22" class="ml-0.5" />
-        </span>
+          <span
+            class="play-pulse flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 text-black shadow-xl shadow-amber-400/50 ring-4 ring-amber-400/25 transition-transform duration-300 group-hover:scale-110 sm:h-12 sm:w-12"
+          >
+            <Icon name="mdi:play" size="22" class="ml-0.5" />
+          </span>
+          <span
+            class="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white sm:text-xs"
+          >
+            Play Now
+          </span>
+        </div>
+
         <span
-          class="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white sm:text-xs"
+          v-if="game.isNew"
+          class="absolute left-3 top-3 z-[2] inline-flex w-fit rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-400"
         >
-          Play Now
+          New
         </span>
       </div>
 
-      <span
-        v-if="game.isNew"
-        class="absolute left-3 top-3 z-[2] inline-flex w-fit rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-400"
-      >
-        New
-      </span>
-
-      <div
-        class="absolute inset-x-0 bottom-0 z-[1] bg-gradient-to-t from-black/95 via-black/75 to-transparent px-3 pb-3 pt-10 sm:px-4 sm:pb-4 sm:pt-12"
-      >
+      <div class="px-3 py-2 sm:px-4 sm:py-3">
         <h3
           class="truncate text-xs font-bold text-white sm:text-sm md:text-base"
           :title="game.title"

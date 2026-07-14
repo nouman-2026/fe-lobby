@@ -4,7 +4,7 @@ const settings = useSettingsStore()
 
 <template>
   <div
-    class="flex h-dvh flex-col overflow-hidden bg-[#121212] text-slate-100 lg:flex-row"
+    class="flex h-dvh flex-col overflow-hidden bg-[#121212] font-sans text-slate-100 lg:flex-row"
   >
     <!-- Mobile top bar: menu | centered logo -->
     <header
