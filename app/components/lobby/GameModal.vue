@@ -1,40 +1,32 @@
 <script setup lang="ts">
-import { buildGameLaunchUrl } from '~/utils/gameLaunchUrl'
-import { getGameById } from '~/data/games'
-
 const settings = useSettingsStore()
+const catalog = useCatalogStore()
 
 const game = computed(() =>
-  settings.activeGameId ? getGameById(settings.activeGameId) : null
+  settings.activeGameId ? catalog.getGameById(settings.activeGameId) : null
 )
 
-const launchUrl = computed(() =>
-  game.value ? buildGameLaunchUrl(game.value.id) : ''
+const isVisible = computed(
+  () =>
+    !!game.value && !!settings.activeGameLaunchUrl && !settings.gameMinimized
 )
 </script>
 
 <template>
-  <Transition name="game-modal">
-    <div
-      v-if="game && launchUrl"
-      class="fixed inset-0 z-[100] flex flex-col overflow-hidden bg-black"
-      role="dialog"
-      aria-modal="true"
-      :aria-label="game.title"
-    >
-      <LobbyGameFrame :src="launchUrl" :title="game.title" />
-    </div>
-  </Transition>
+  <!-- Keep iframe mounted while a session exists; only hide when minimized. -->
+  <div
+    v-if="settings.clientReady && game && settings.activeGameLaunchUrl"
+    class="fixed inset-0 flex flex-col overflow-hidden bg-black"
+    :class="isVisible ? 'z-[100]' : 'pointer-events-none invisible z-0'"
+    role="dialog"
+    aria-modal="true"
+    :aria-hidden="!isVisible"
+    :aria-label="game.title"
+  >
+    <LobbyGameFrame
+      :src="settings.activeGameLaunchUrl"
+      :title="game.title"
+      :session-visible="isVisible"
+    />
+  </div>
 </template>
-
-<style scoped>
-.game-modal-enter-active,
-.game-modal-leave-active {
-  transition: opacity 0.25s ease;
-}
-
-.game-modal-enter-from,
-.game-modal-leave-to {
-  opacity: 0;
-}
-</style>

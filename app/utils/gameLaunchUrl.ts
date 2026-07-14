@@ -1,18 +1,28 @@
+import type { Game } from '~/data/games'
+
 export function getGameSessionId() {
   if (import.meta.server) return 'EXAMPLE'
 
   return new URLSearchParams(window.location.search).get('session') ?? 'EXAMPLE'
 }
 
-export function buildGameLaunchUrl(
-  gameId: string,
+/**
+ * Resolve a catalog launch path (or fallback) to a full iframe URL.
+ * `origin` comes from the settings store (set once on page load).
+ */
+export function resolveGameLaunchUrl(
+  game: Pick<Game, 'id' | 'slug' | 'launchUrl'>,
+  origin: string,
   session = getGameSessionId()
 ) {
-  if (import.meta.server) return ''
+  if (!origin) return ''
 
-  const url = new URL(window.location.origin)
+  if (game.launchUrl) {
+    return new URL(game.launchUrl, origin).href
+  }
+
+  const url = new URL(origin)
   url.searchParams.set('session', session)
-  url.searchParams.set('gameid', gameId)
-
-  return url.toString()
+  url.searchParams.set('gameid', game.id)
+  return url.href
 }

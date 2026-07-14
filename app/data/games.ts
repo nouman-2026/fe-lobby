@@ -13,8 +13,11 @@ export interface Game {
   isNew: boolean
   provider: string
   status: GameStatus
+  /** Optional hardcoded iframe URL for local testing */
+  launchUrl?: string
 }
 
+/** Static seed data — runtime access goes through `useCatalogStore`. */
 export const games: Game[] = catalog.games.filter(
   (game) => game.status === 'active'
 ) as Game[]
@@ -29,20 +32,3 @@ export const sidebarNavItems: {
   { id: 'slots', label: 'Slots', icon: 'mdi:slot-machine-outline' },
   { id: 'crash', label: 'Crash', icon: 'mdi:rocket-launch-outline' },
 ]
-
-export function filterGamesByCategory(category: SidebarCategory) {
-  switch (category) {
-    case 'new':
-      return games.filter((game) => game.isNew)
-    case 'slots':
-      return games.filter((game) => game.category === 'slots')
-    case 'crash':
-      return games.filter((game) => game.category === 'crash')
-    default:
-      return games
-  }
-}
-
-export function getGameById(id: string) {
-  return games.find((game) => game.id === id)
-}

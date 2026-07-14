@@ -6,15 +6,25 @@ const settings = useSettingsStore()
   <div
     class="flex h-dvh flex-col overflow-hidden bg-[#121212] text-slate-100 lg:flex-row"
   >
-    <!-- Mobile top bar with logo -->
+    <!-- Mobile top bar: menu | centered logo -->
     <header
-      class="flex shrink-0 items-center gap-2 border-b border-zinc-800/80 bg-[#1a1a1a] px-3 py-2.5 lg:hidden"
+      class="relative flex shrink-0 items-center border-b border-zinc-800/80 bg-[#1a1a1a] px-3 py-2.5 lg:hidden"
     >
-      <img src="/logo.svg" alt="Logo" class="h-6 w-auto shrink-0" />
-      <div class="ml-auto flex min-w-0 items-center gap-1.5">
-        <LobbyWalletBalance variant="pill" />
-        <LobbyUserProfile compact />
-      </div>
+      <button
+        type="button"
+        class="relative z-10 flex h-10 w-10 items-center justify-center rounded-lg text-white transition hover:bg-zinc-800"
+        aria-label="Open menu"
+        :aria-expanded="settings.mobileSidebarOpen"
+        @click="settings.openMobileSidebar()"
+      >
+        <Icon name="uis:list-ul" size="34" />
+      </button>
+
+      <img
+        src="/logo.svg"
+        alt="Logo"
+        class="pointer-events-none absolute left-1/2 h-8 w-auto -translate-x-1/2"
+      />
     </header>
 
     <LobbySidebar />
@@ -32,6 +42,7 @@ const settings = useSettingsStore()
     </div>
 
     <LobbyGameModal />
+    <LobbyFloatingRunningGame />
   </div>
 </template>
 

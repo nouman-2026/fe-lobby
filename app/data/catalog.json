@@ -1,6 +1,17 @@
 {
   "games": [
     {
+      "id": "johns-fortune",
+      "title": "Johns Fortune",
+      "slug": "johns-fortune",
+      "thumbnail": "https://cdn.ninjagaming.org/storage/games/ej8XxnKF52nzB7qpMVYuBSmcsT8teCgVzDiqlDh5.png",
+      "category": "slots",
+      "isNew": false,
+      "provider": "NG",
+      "status": "active",
+      "launchUrl": "/games/johns-fortune/?game_id=johns-fortune&session_id=dfb0935a-0121-4d4a-b5c5-912eb6a69ae5&user_id=d2ac3e73-c46e-4c04-a1d7-619dfe44a56f"
+    },
+    {
       "id": "popcorn-madness",
       "title": "Popcorn Madness",
       "slug": "popcorn-madness",
