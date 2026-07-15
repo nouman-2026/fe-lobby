@@ -12,6 +12,7 @@ const emit = defineEmits<{
 
 const catalog = useCatalogStore()
 const catalogFilter = computed(() => props.category)
+const { pageSize } = useCatalogGridPageSize()
 
 const games = computed(() => catalog.getGamesForCategory(catalogFilter.value))
 
@@ -38,18 +39,14 @@ const gridClass = computed(() =>
 )
 
 watch(
-  catalogFilter,
-  (filter) => {
+  [catalogFilter, pageSize],
+  ([filter, size]) => {
     if (import.meta.client) {
-      catalog.ensureCategory(filter)
+      catalog.ensureCategory(filter, size)
     }
   },
   { immediate: true }
 )
-
-onMounted(() => {
-  catalog.ensureCategory(catalogFilter.value)
-})
 
 function onSelect(gameId: string) {
   emit('select', gameId)
@@ -69,7 +66,7 @@ function onLoadMore() {
       aria-label="Loading games"
     >
       <div
-        v-for="index in 12"
+        v-for="index in pageSize"
         :key="index"
         class="animate-pulse overflow-hidden rounded-2xl bg-zinc-900"
         :class="

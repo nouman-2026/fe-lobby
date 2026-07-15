@@ -4,6 +4,7 @@
 .nuxt
 .nitro
 .cache
+.certs
 dist
 
 # Node dependencies
@@ -23,4 +24,7 @@ logs
 .env.*
 !.env.example
 .cursor
+
+# Local dev TLS certificates (private keys)
+cert/
 /public/games

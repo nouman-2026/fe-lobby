@@ -20,9 +20,20 @@ const emit = defineEmits<{
 const loaded = ref(false)
 const imgRef = ref<HTMLImageElement | null>(null)
 
+function markLoaded() {
+  loaded.value = true
+}
+
 function syncLoadedState() {
+  if (!props.game.thumbnail) {
+    markLoaded()
+    return
+  }
+
   const img = imgRef.value
-  loaded.value = !!img?.complete && img.naturalWidth > 0
+  if (img?.complete && img.naturalWidth > 0) {
+    markLoaded()
+  }
 }
 
 watch(
@@ -37,8 +48,18 @@ onMounted(() => {
   nextTick(syncLoadedState)
 })
 
-function onLoaded() {
-  loaded.value = true
+async function onImageLoad(event: Event) {
+  const img = event.target as HTMLImageElement
+
+  try {
+    if (typeof img.decode === 'function') {
+      await img.decode()
+    }
+  } catch {
+    // Show the image even if decode fails.
+  }
+
+  markLoaded()
 }
 
 function onSelect() {
@@ -57,59 +78,40 @@ function onSelect() {
     "
     @click="onSelect"
   >
-    <!-- Skeleton overlay -->
-    <div
-      v-show="!loaded"
-      class="absolute inset-0 z-20 overflow-hidden rounded-[inherit] bg-zinc-900"
-      aria-hidden="true"
-    >
-      <template v-if="layoutMode === 'list'">
-        <div class="flex h-full animate-pulse space-x-4 px-1 py-1 sm:px-0">
-          <div
-            class="aspect-[4/5] w-16 shrink-0 rounded-lg bg-zinc-800 sm:w-20"
-          />
-          <div class="min-w-0 flex-1 space-y-6 py-1">
-            <div class="h-2 rounded bg-zinc-700" />
-            <div class="space-y-3">
-              <div class="grid grid-cols-3 gap-4">
-                <div class="col-span-2 h-2 rounded bg-zinc-700" />
-                <div class="col-span-1 h-2 rounded bg-zinc-700" />
-              </div>
-              <div class="h-2 rounded bg-zinc-800" />
-            </div>
-          </div>
-        </div>
-      </template>
-
-      <template v-else>
-        <div class="flex h-full animate-pulse flex-col">
-          <div class="aspect-[4/5] w-full shrink-0 rounded-2xl bg-zinc-800" />
-          <div class="mt-2 px-1">
-            <div class="h-2.5 w-3/4 rounded bg-zinc-700" />
-          </div>
-        </div>
-      </template>
-    </div>
-
     <template v-if="layoutMode === 'list'">
       <div
         class="relative aspect-[4/5] w-16 shrink-0 overflow-hidden rounded-xl ring-1 ring-white/10 sm:w-20"
       >
+        <Transition name="card-image-loader">
+          <div
+            v-if="!loaded"
+            class="absolute inset-0 z-[2] flex items-center justify-center bg-zinc-900"
+            aria-hidden="true"
+          >
+            <Icon
+              name="mdi:loading"
+              size="22"
+              class="animate-spin text-amber-400/90"
+            />
+          </div>
+        </Transition>
+
         <img
           ref="imgRef"
           :src="game.thumbnail"
           :alt="game.title"
           width="128"
           height="160"
-          class="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+          class="card-image h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+          :class="loaded ? 'opacity-100' : 'opacity-0'"
           :loading="eager ? 'eager' : 'lazy'"
           decoding="async"
-          @load="onLoaded"
-          @error="onLoaded"
+          @load="onImageLoad"
+          @error="markLoaded"
         />
 
         <div
-          class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100"
+          class="absolute inset-0 z-[3] flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100"
         >
           <span
             class="flex h-8 w-8 items-center justify-center rounded-full bg-amber-400 text-black shadow-lg shadow-amber-400/40"
@@ -134,30 +136,46 @@ function onSelect() {
       <div
         class="card-art relative aspect-[4/5] w-full shrink-0 overflow-hidden rounded-2xl"
       >
+        <Transition name="card-image-loader">
+          <div
+            v-if="!loaded"
+            class="absolute inset-0 z-[2] flex items-center justify-center bg-zinc-900"
+            aria-busy="true"
+            :aria-label="`Loading ${game.title}`"
+          >
+            <Icon
+              name="mdi:loading"
+              size="28"
+              class="animate-spin text-amber-400/90"
+            />
+          </div>
+        </Transition>
+
         <img
           ref="imgRef"
           :src="game.thumbnail"
           :alt="game.title"
           width="512"
           height="640"
-          class="absolute inset-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.04]"
+          class="card-image absolute inset-0 z-[1] h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.04]"
+          :class="loaded ? 'opacity-100' : 'opacity-0'"
           :loading="eager ? 'eager' : 'lazy'"
           decoding="async"
-          @load="onLoaded"
-          @error="onLoaded"
+          @load="onImageLoad"
+          @error="markLoaded"
         />
 
         <div
-          class="pointer-events-none absolute inset-0 z-[2] ring-1 ring-inset ring-white/10 transition duration-300 group-hover:ring-amber-400/30"
+          class="pointer-events-none absolute inset-0 z-[3] ring-1 ring-inset ring-white/10 transition duration-300 group-hover:ring-amber-400/30"
         />
 
         <div
-          class="card-shine pointer-events-none absolute inset-0 z-[3] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          class="card-shine pointer-events-none absolute inset-0 z-[4] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           aria-hidden="true"
         />
 
         <div
-          class="absolute inset-0 z-[4] flex flex-col items-center justify-center gap-2 bg-black/20 opacity-0 transition-all duration-300 group-hover:bg-black/35 group-hover:opacity-100 group-hover:backdrop-blur-[2px]"
+          class="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-2 bg-black/20 opacity-0 transition-all duration-300 group-hover:bg-black/35 group-hover:opacity-100 group-hover:backdrop-blur-[2px]"
         >
           <span
             class="play-pulse flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-amber-300 to-amber-500 text-black shadow-xl shadow-amber-400/50 ring-4 ring-amber-400/25 transition-transform duration-300 group-hover:scale-110"
@@ -217,6 +235,20 @@ function onSelect() {
     0 0 0 1px rgb(251 191 36 / 0.2),
     0 0 60px -12px rgb(251 191 36 / 0.15);
   transform: translateY(-2px);
+}
+
+.card-image {
+  transition:
+    opacity 0.45s ease-out,
+    transform 0.5s ease-out;
+}
+
+.card-image-loader-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.card-image-loader-leave-to {
+  opacity: 0;
 }
 
 .card-shine {

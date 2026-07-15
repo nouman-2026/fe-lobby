@@ -1,8 +1,7 @@
 import type { ApiGame, GamesResponse, Pagination } from '~/types/catalog'
 import type { CatalogFilter, Game } from '~/data/games'
+import { CATALOG_TARGET_CARDS } from '~/constants/catalogGrid'
 import { resolveGameImageUrl } from '~/utils/gameImageUrl'
-
-const PAGE_SIZE = 12
 
 interface CategoryCache {
   games: Game[]
@@ -13,12 +12,12 @@ interface CategoryCache {
   initialized: boolean
 }
 
-function createEmptyPagination(): Pagination {
+function createEmptyPagination(pageSize = CATALOG_TARGET_CARDS): Pagination {
   return {
     total_count: 0,
     total_pages: 0,
     page: 0,
-    page_size: PAGE_SIZE,
+    page_size: pageSize,
   }
 }
 
@@ -147,7 +146,11 @@ export const useCatalogStore = defineStore(
       return gamesById.value.get(id)
     }
 
-    async function fetchGames(filter: CatalogFilter, page: number) {
+    async function fetchGames(
+      filter: CatalogFilter,
+      page: number,
+      pageSize: number
+    ) {
       if (import.meta.server) return
 
       const isLoadMore = page > 1
@@ -163,7 +166,7 @@ export const useCatalogStore = defineStore(
         const apiCategory = toApiCategory(filter)
         const response = await api.get<GamesResponse>('/games', {
           page,
-          page_size: PAGE_SIZE,
+          page_size: pageSize,
           ...(apiCategory ? { category: apiCategory } : {}),
         })
 
@@ -187,11 +190,21 @@ export const useCatalogStore = defineStore(
       }
     }
 
-    async function ensureCategory(filter: CatalogFilter) {
+    async function ensureCategory(
+      filter: CatalogFilter,
+      pageSize: number = CATALOG_TARGET_CARDS
+    ) {
       if (import.meta.server) return
 
       const cache = getCategoryCache(filter)
-      if (cache.initialized) return
+      const pageSizeChanged =
+        cache.initialized && cache.pagination.page_size !== pageSize
+
+      if (cache.initialized && !pageSizeChanged) return
+
+      if (pageSizeChanged) {
+        patchCategoryCache(filter, createEmptyCategoryCache())
+      }
 
       const inflight = inflightFetches.get(filter)
       if (inflight) {
@@ -199,7 +212,7 @@ export const useCatalogStore = defineStore(
         return
       }
 
-      const request = fetchGames(filter, 1).finally(() => {
+      const request = fetchGames(filter, 1, pageSize).finally(() => {
         inflightFetches.delete(filter)
       })
 
@@ -215,7 +228,7 @@ export const useCatalogStore = defineStore(
       const nextPage = cache.pagination.page + 1
       if (nextPage > cache.pagination.total_pages) return
 
-      await fetchGames(filter, nextPage)
+      await fetchGames(filter, nextPage, cache.pagination.page_size)
     }
 
     return {

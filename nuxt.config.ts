@@ -1,6 +1,9 @@
 /// <reference types="node" />
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+import mkcert from 'vite-plugin-mkcert'
+import path from 'path'
+
 function resolveCdnOrigin(url: string) {
   if (!url) return ''
 
@@ -28,16 +31,23 @@ const cdnHostname = resolveCdnHostname(cdnUrl)
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      nuxtPublicBaseUrl:
-        process.env.NUXT_PUBLIC_BASE_URL ||
-        'https://demo.ninjagaming.com/lobby/api',
+      nuxtPublicBaseUrl: process.env.NUXT_PUBLIC_BASE_URL,
       nuxtPublicCdnUrl: cdnUrl,
     },
   },
-  compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
   devServer: {
     port: 4500,
+    https: true,
+    host: 'local.ninjagaming.com',
+  },
+  vite: {
+    plugins: [
+      mkcert({
+        savePath: path.resolve(__dirname, './.certs'),
+        hosts: ['local.ninjagaming.com', 'localhost', '127.0.0.1'],
+      }),
+    ],
   },
   css: ['~/assets/css/main.css'],
   modules: [
