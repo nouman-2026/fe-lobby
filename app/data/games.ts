@@ -1,9 +1,9 @@
-import catalog from './catalog.json'
-
 export type GameCategory = 'slots' | 'crash'
-export type SidebarCategory = 'all' | 'new' | 'slots' | 'crash'
+/** Sidebar tab ids — `all` is the default tab and omits the API category param. */
+export type CatalogFilter = 'all' | 'new' | 'slots' | 'crash'
 export type GameStatus = 'active' | 'inactive'
 
+/** UI-facing game model mapped from API responses. */
 export interface Game {
   id: string
   title: string
@@ -17,13 +17,8 @@ export interface Game {
   launchUrl?: string
 }
 
-/** Static seed data — runtime access goes through `useCatalogStore`. */
-export const games: Game[] = catalog.games.filter(
-  (game) => game.status === 'active'
-) as Game[]
-
 export const sidebarNavItems: {
-  id: SidebarCategory
+  id: CatalogFilter
   label: string
   icon: string
 }[] = [

@@ -3,9 +3,10 @@ import {
   readPersistedGameSession,
   writePersistedGameSession,
 } from '~/utils/persistedGameSession'
+import type { CatalogFilter } from '~/data/games'
 
 export type LayoutMode = 'grid' | 'list'
-export type GameCategory = 'all' | 'new' | 'slots' | 'crash'
+export type GameCategory = CatalogFilter
 
 export const useSettingsStore = defineStore('settings', () => {
   const layoutMode = ref<LayoutMode>('grid')
@@ -107,6 +108,10 @@ export const useSettingsStore = defineStore('settings', () => {
     closeMobileSidebar()
   }
 
+  function showAllGames() {
+    setActiveCategory('all')
+  }
+
   function openLobby() {
     lobbyOpen.value = true
   }
@@ -201,6 +206,7 @@ export const useSettingsStore = defineStore('settings', () => {
     closeMobileSidebar,
     toggleMobileSidebar,
     setActiveCategory,
+    showAllGames,
     openLobby,
     closeLobby,
     toggleLobby,

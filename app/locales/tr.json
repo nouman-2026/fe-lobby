@@ -1,0 +1,42 @@
+{
+  "common": {
+    "logo": "Logo",
+    "new": "Yeni"
+  },
+  "nav": {
+    "allGames": "Tüm Oyunlar",
+    "new": "Yeni",
+    "slots": "Slotlar",
+    "crash": "Crash"
+  },
+  "aria": {
+    "lobbyNavigation": "Lobi navigasyonu",
+    "lobbyCategories": "Lobi kategorileri",
+    "gameLobby": "Oyun lobisi",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "closeGame": "Oyunu kapat",
+    "backToGame": "{title} oyununa dön"
+  },
+  "lobby": {
+    "selectTitle": "Oynamak için bir oyun seçin",
+    "layoutGrid": "Izgara",
+    "layoutList": "Liste"
+  },
+  "gameCard": {
+    "playNow": "Hemen Oyna"
+  },
+  "categories": {
+    "slots": "Slotlar",
+    "crash": "Crash"
+  },
+  "profile": {
+    "player": "Oyuncu"
+  },
+  "wallet": {
+    "balance": "Cüzdan Bakiyesi"
+  },
+  "runningGame": {
+    "backToGame": "Oyuna dön"
+  }
+}

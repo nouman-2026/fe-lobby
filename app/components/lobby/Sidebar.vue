@@ -46,7 +46,14 @@ function onBackdropClick() {
     aria-label="Lobby navigation"
   >
     <div class="flex items-center justify-between px-5 pb-3 pt-6">
-      <img src="/logo.svg" alt="Logo" class="h-7 w-auto" />
+      <button
+        type="button"
+        class="rounded-lg transition hover:opacity-80"
+        aria-label="Show all games"
+        @click="settings.showAllGames()"
+      >
+        <img src="/logo.svg" alt="Logo" class="h-7 w-auto" />
+      </button>
       <button
         type="button"
         class="flex h-9 w-9 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-zinc-800 hover:text-white lg:hidden"

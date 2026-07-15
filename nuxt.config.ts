@@ -1,5 +1,39 @@
+/// <reference types="node" />
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+function resolveCdnOrigin(url: string) {
+  if (!url) return ''
+
+  try {
+    return new URL(url).origin
+  } catch {
+    return ''
+  }
+}
+
+function resolveCdnHostname(url: string) {
+  if (!url) return ''
+
+  try {
+    return new URL(url).hostname
+  } catch {
+    return ''
+  }
+}
+
+const cdnUrl = process.env.NUXT_PUBLIC_CDN_URL ?? ''
+const cdnOrigin = resolveCdnOrigin(cdnUrl)
+const cdnHostname = resolveCdnHostname(cdnUrl)
+
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      nuxtPublicBaseUrl:
+        process.env.NUXT_PUBLIC_BASE_URL ||
+        'https://demo.ninjagaming.com/lobby/api',
+      nuxtPublicCdnUrl: cdnUrl,
+    },
+  },
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
   devServer: {
@@ -26,7 +60,7 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      link: [{ rel: 'preconnect', href: 'https://cdn.ninjagaming.org' }],
+      link: cdnOrigin ? [{ rel: 'preconnect', href: cdnOrigin }] : [],
     },
   },
   icon: {
@@ -35,7 +69,7 @@ export default defineNuxtConfig({
     },
   },
   image: {
-    domains: ['cdn.ninjagaming.org'],
+    domains: cdnHostname ? [cdnHostname] : [],
     quality: 80,
     presets: {
       gameCard: {
