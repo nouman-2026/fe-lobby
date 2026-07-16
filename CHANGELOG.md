@@ -14,7 +14,7 @@ All notable changes to the Ninja Gaming lobby are documented in this file.
 - Game launch flow: `POST /launch` returns a URL that is injected into a full-screen game iframe.
 - Loading spinner shown while the launch request is in flight and while the game iframe is preparing.
 - Minimize / resume / close controls for a running game, including a floating "back to game" card.
-- Cross-frame bridge (`window.__NINJA_WEB_LOBBY__` and `postMessage`) for minimize/resume/close signals.
+- Game → lobby `postMessage` (`NINJA_LOBBY_MINIMIZE`) so an in-game lobby button can return to the catalog; resume/close stay on lobby UI.
 - "Preview not available" fallback for broken or missing game thumbnails.
 - App version tag exposed via runtime config and shown in the sidebar footer.
 

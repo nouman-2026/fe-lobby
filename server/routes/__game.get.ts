@@ -1,6 +1,6 @@
 /**
  * Same-origin game shell for local iframe testing.
- * Proxies game HTML from the current request origin and injects the web-lobby bridge.
+ * Proxies game HTML from the current request origin and rewrites root-relative URLs.
  */
 export default defineEventHandler(async (event) => {
   const requestUrl = getRequestURL(event)
@@ -30,26 +30,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const bridge = `
-<script>
-  try { delete window.__NINJA_MOBILE_LOBBY__; delete window.ninjaShell; } catch (e) {}
-  window.__NINJA_WEB_LOBBY__ = {
-    embedded: true,
-    minimizeGame: function () {
-      try { window.parent.postMessage({ type: 'NINJA_LOBBY_MINIMIZE' }, '*'); } catch (e) {}
-    },
-    resumeGame: function () {
-      try { window.parent.postMessage({ type: 'NINJA_LOBBY_RESUME' }, '*'); } catch (e) {}
-    },
-    closeGame: function () {
-      try { window.parent.postMessage({ type: 'NINJA_LOBBY_CLOSE' }, '*'); } catch (e) {}
-    },
-  };
-</script>`
-
-  let out = html.replace(/<head([^>]*)>/i, `<head$1>${bridge}`)
-
-  out = out.replace(/(src|href)=(["'])\//g, `$1=$2${gameOrigin}/`)
+  let out = html.replace(/(src|href)=(["'])\//g, `$1=$2${gameOrigin}/`)
   out = out.replace(/(from\s*)(["'])\//g, `$1$2${gameOrigin}/`)
   out = out.replace(/(import\s*\(\s*)(["'])\//g, `$1$2${gameOrigin}/`)
 
