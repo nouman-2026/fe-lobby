@@ -14,6 +14,12 @@ const catalog = useCatalogStore()
 const catalogFilter = computed(() => props.category)
 const { pageSize } = useCatalogGridPageSize()
 
+/** Defer catalog UI until after mount so SSR HTML matches hydration (persist may restore games on client only). */
+const hasMounted = ref(false)
+onMounted(() => {
+  hasMounted.value = true
+})
+
 const games = computed(() => catalog.getGamesForCategory(catalogFilter.value))
 
 const pagination = computed(() =>
@@ -23,7 +29,25 @@ const pagination = computed(() =>
 const loading = computed(() => catalog.isLoading(catalogFilter.value))
 const loadingMore = computed(() => catalog.isLoadingMore(catalogFilter.value))
 const error = computed(() => catalog.getError(catalogFilter.value))
+const initialized = computed(() => catalog.isInitialized(catalogFilter.value))
 const hasMore = computed(() => catalog.hasMoreGames(catalogFilter.value))
+
+const showSkeleton = computed(
+  () =>
+    !hasMounted.value ||
+    (games.value.length === 0 && (loading.value || !initialized.value))
+)
+const showError = computed(
+  () => hasMounted.value && !!error.value && games.value.length === 0
+)
+const showEmpty = computed(
+  () =>
+    hasMounted.value &&
+    initialized.value &&
+    !loading.value &&
+    !error.value &&
+    games.value.length === 0
+)
 
 const progressPercent = computed(() => {
   const total = pagination.value.total_count
@@ -60,7 +84,7 @@ function onLoadMore() {
 <template>
   <div class="flex w-full flex-col">
     <div
-      v-if="loading && games.length === 0"
+      v-if="showSkeleton"
       :class="gridClass"
       aria-busy="true"
       aria-label="Loading games"
@@ -94,14 +118,14 @@ function onLoadMore() {
     </div>
 
     <p
-      v-else-if="error && games.length === 0"
+      v-else-if="showError"
       class="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-6 text-center text-sm text-red-300"
     >
       {{ error }}
     </p>
 
     <p
-      v-else-if="!loading && games.length === 0"
+      v-else-if="showEmpty"
       class="rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-10 text-center text-sm text-zinc-400"
     >
       No games found in this category.

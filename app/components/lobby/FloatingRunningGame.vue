@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { resolveGameImageUrl } from '~/utils/gameImageUrl'
+
 const settings = useSettingsStore()
 const catalog = useCatalogStore()
 
@@ -6,14 +8,15 @@ const game = computed(() =>
   settings.activeGameId ? catalog.getGameById(settings.activeGameId) : null
 )
 
+const thumbnailUrl = computed(() =>
+  game.value ? resolveGameImageUrl(game.value.thumbnail) : ''
+)
+
 const thumbFailed = ref(false)
 
-watch(
-  () => game.value?.thumbnail,
-  () => {
-    thumbFailed.value = false
-  }
-)
+watch(thumbnailUrl, () => {
+  thumbFailed.value = false
+})
 
 function onResume() {
   settings.resumeGame()
@@ -49,7 +52,7 @@ function onClose(event: Event) {
           >
             <img
               v-if="!thumbFailed"
-              :src="game.thumbnail"
+              :src="thumbnailUrl"
               :alt="game.title"
               class="h-full w-full object-cover"
               loading="lazy"

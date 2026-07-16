@@ -1,7 +1,7 @@
 import type { ApiGame, GamesResponse, Pagination } from '~/types/catalog'
 import type { CatalogFilter, Game } from '~/data/games'
 import { CATALOG_TARGET_CARDS } from '~/constants/catalogGrid'
-import { resolveGameImageUrl } from '~/utils/gameImageUrl'
+import { toGameImagePath } from '~/utils/gameImageUrl'
 
 /** Catalog pinia cache TTL — after this, a refresh fetches a fresh copy. */
 const CATALOG_CACHE_TTL_MS = 30 * 60 * 1000
@@ -64,7 +64,8 @@ function mapApiGameToGame(apiGame: ApiGame): Game {
     id: apiGame.game_id,
     title: apiGame.name,
     slug: apiGame.game_id,
-    thumbnail: resolveGameImageUrl(apiGame.background_image),
+    // Store CDN-relative path; resolve to absolute URL at render time.
+    thumbnail: toGameImagePath(apiGame.background_image),
     category: toUiCategory(apiGame.category),
     provider: '',
     status: 'active',
@@ -79,6 +80,10 @@ function sanitizePersistedCaches(
       key,
       {
         ...cache,
+        games: cache.games.map((game) => ({
+          ...game,
+          thumbnail: toGameImagePath(game.thumbnail),
+        })),
         loading: false,
         loadingMore: false,
         error: null,
@@ -140,6 +145,10 @@ export const useCatalogStore = defineStore(
 
     function getError(filter: CatalogFilter) {
       return getCategoryCache(filter).error
+    }
+
+    function isInitialized(filter: CatalogFilter) {
+      return getCategoryCache(filter).initialized
     }
 
     function hasMoreGames(filter: CatalogFilter) {
@@ -244,6 +253,7 @@ export const useCatalogStore = defineStore(
       isLoading,
       isLoadingMore,
       getError,
+      isInitialized,
       hasMoreGames,
       getGameById,
       fetchGames,

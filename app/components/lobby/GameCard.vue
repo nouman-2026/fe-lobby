@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Game } from '~/data/games'
+import { resolveGameImageUrl } from '~/utils/gameImageUrl'
 
 const props = withDefaults(
   defineProps<{
@@ -21,6 +22,8 @@ const loaded = ref(false)
 const failed = ref(false)
 const imgRef = ref<HTMLImageElement | null>(null)
 
+const thumbnailUrl = computed(() => resolveGameImageUrl(props.game.thumbnail))
+
 function markLoaded() {
   loaded.value = true
 }
@@ -31,7 +34,7 @@ function onImageError() {
 }
 
 function syncLoadedState() {
-  if (!props.game.thumbnail) {
+  if (!thumbnailUrl.value) {
     failed.value = true
     markLoaded()
     return
@@ -47,14 +50,11 @@ function syncLoadedState() {
   }
 }
 
-watch(
-  () => props.game.thumbnail,
-  () => {
-    loaded.value = false
-    failed.value = false
-    nextTick(syncLoadedState)
-  }
-)
+watch(thumbnailUrl, () => {
+  loaded.value = false
+  failed.value = false
+  nextTick(syncLoadedState)
+})
 
 onMounted(() => {
   nextTick(syncLoadedState)
@@ -111,7 +111,7 @@ function onSelect() {
         <img
           v-if="!failed"
           ref="imgRef"
-          :src="game.thumbnail"
+          :src="thumbnailUrl"
           :alt="game.title"
           width="128"
           height="160"
@@ -177,7 +177,7 @@ function onSelect() {
         <img
           v-if="!failed"
           ref="imgRef"
-          :src="game.thumbnail"
+          :src="thumbnailUrl"
           :alt="game.title"
           width="512"
           height="640"
