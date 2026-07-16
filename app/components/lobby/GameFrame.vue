@@ -8,14 +8,79 @@ const props = defineProps<{
   sessionVisible?: boolean
 }>()
 
+const emit = defineEmits<{
+  loadError: []
+}>()
+
+const IFRAME_LOAD_TIMEOUT_MS = 15_000
+const REACHABILITY_TIMEOUT_MS = 10_000
+
 const iframeRef = ref<HTMLIFrameElement | null>(null)
 const iframeLoading = ref(true)
 
+let loadWatchdog: ReturnType<typeof setTimeout> | null = null
+let probeToken = 0
+
+function clearLoadWatchdog() {
+  if (loadWatchdog != null) {
+    clearTimeout(loadWatchdog)
+    loadWatchdog = null
+  }
+}
+
+function failLoad() {
+  clearLoadWatchdog()
+  iframeLoading.value = false
+  emit('loadError')
+}
+
+/** Detect "This site can’t be reached" before / while the iframe navigates. */
+async function isLaunchUrlReachable(url: string): Promise<boolean> {
+  try {
+    await fetch(url, {
+      method: 'GET',
+      mode: 'no-cors',
+      cache: 'no-store',
+      signal: AbortSignal.timeout(REACHABILITY_TIMEOUT_MS),
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
+function startLoadWatchdog() {
+  clearLoadWatchdog()
+  loadWatchdog = setTimeout(() => {
+    if (iframeLoading.value) {
+      failLoad()
+    }
+  }, IFRAME_LOAD_TIMEOUT_MS)
+}
+
 watch(
   () => props.src,
-  () => {
+  async (src) => {
+    const token = ++probeToken
     iframeLoading.value = true
-  }
+    clearLoadWatchdog()
+
+    if (!src) {
+      failLoad()
+      return
+    }
+
+    const reachable = await isLaunchUrlReachable(src)
+    if (token !== probeToken) return
+
+    if (!reachable) {
+      failLoad()
+      return
+    }
+
+    startLoadWatchdog()
+  },
+  { immediate: true }
 )
 
 function syncSession() {
@@ -24,10 +89,8 @@ function syncSession() {
   const frame = iframeRef.value
   const visible = props.sessionVisible
 
-  // Same-origin: mute/unmute audio inside the iframe (no game code changes).
   setIframeAudioMuted(frame, !visible)
 
-  // Optional signal for game-ui microfrontend if it wants richer pause handling.
   try {
     frame?.contentWindow?.postMessage(
       { type: 'NINJA_LOBBY_VISIBILITY', visible },
@@ -47,8 +110,14 @@ watch(
 
 function onLoad() {
   iframeLoading.value = false
+  clearLoadWatchdog()
   syncSession()
 }
+
+onBeforeUnmount(() => {
+  probeToken += 1
+  clearLoadWatchdog()
+})
 </script>
 
 <template>

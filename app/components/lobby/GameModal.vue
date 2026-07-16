@@ -35,6 +35,7 @@ const showLaunchState = computed(
       :src="settings.activeGameLaunchUrl"
       :title="game.title"
       :session-visible="isVisible"
+      @load-error="settings.closeGame()"
     />
   </div>
 

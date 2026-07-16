@@ -27,10 +27,10 @@ Copy the example environment files and adjust as needed:
 cp .env.example .env
 ```
 
-| File                | Used by        | Contents                                      |
-| ------------------- | -------------- | --------------------------------------------- |
-| `.env`              | build / preview | CDN image path only                          |
-| `.env.development`  | `npm run dev`  | API base + CDN image path for local hosts     |
+| File               | Used by         | Contents                                  |
+| ------------------ | --------------- | ----------------------------------------- |
+| `.env`             | build / preview | CDN image path only                       |
+| `.env.development` | `npm run dev`   | API base + CDN image path for local hosts |
 
 ## Environment variables
 

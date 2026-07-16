@@ -211,6 +211,7 @@ export const useSettingsStore = defineStore('settings', () => {
     gameMinimized.value = false
     gameLaunchLoading.value = false
     gameLaunchError.value = null
+    lobbyOpen.value = true
     syncPersistedGameSession()
   }
 
