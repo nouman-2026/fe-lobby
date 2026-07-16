@@ -3,6 +3,7 @@
 
 import mkcert from 'vite-plugin-mkcert'
 import path from 'path'
+import { eventHandler, getRequestURL, sendRedirect } from 'h3'
 import { version as appVersion } from './package.json'
 
 function resolveCdnOrigin(url: string) {
@@ -29,11 +30,34 @@ const cdnUrl = process.env.NUXT_PUBLIC_CDN_URL ?? ''
 const cdnOrigin = resolveCdnOrigin(cdnUrl)
 const cdnHostname = resolveCdnHostname(cdnUrl)
 
+const appBaseURL = '/lobby/'
+/** Path without trailing slash — `/lobby` must redirect to `/lobby/` (Nitro dev bug). */
+const appBasePath = appBaseURL.replace(/\/$/, '')
+
 export default defineNuxtConfig({
   app: {
-    baseURL: '/lobby/',
+    baseURL: appBaseURL,
     head: {
       link: cdnOrigin ? [{ rel: 'preconnect', href: cdnOrigin }] : [],
+    },
+  },
+  /**
+   * Requests to the base path without a trailing slash (e.g. `/lobby?session_id=…`)
+   * crash in Nitro's dev serve-static before app middleware runs.
+   * @see https://github.com/nuxt/nuxt/issues/21872
+   */
+  hooks: {
+    'nitro:config'(nitroConfig) {
+      nitroConfig.devHandlers ??= []
+      nitroConfig.devHandlers.unshift({
+        route: '/',
+        handler: eventHandler((event) => {
+          const url = getRequestURL(event)
+          if (url.pathname === appBasePath) {
+            return sendRedirect(event, `${appBaseURL}${url.search}`, 308)
+          }
+        }),
+      })
     },
   },
   routeRules: {
