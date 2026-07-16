@@ -1,5 +1,6 @@
 {
   "name": "fe-lobby",
+  "version": "1.1.0",
   "type": "module",
   "private": true,
   "engines": {
@@ -7,17 +8,34 @@
   },
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --dotenv .env.development",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@nuxt/icon": "^2.3.1",
+    "@nuxt/image": "^2.0.0",
+    "@pinia/nuxt": "^0.11.3",
     "nuxt": "^4.4.8",
+    "pinia": "^3.0.4",
+    "pinia-plugin-persistedstate": "^4.7.1",
+    "typeface-montserrat": "^1.1.13",
     "vue": "^3.5.39",
     "vue-router": "^5.1.0"
   },
   "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.14.0"
+    "@iconify-json/mdi": "^1.2.3",
+    "@nuxt/eslint": "^1.16.0",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@types/node": "^26.1.1",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.4",
+    "vite-plugin-mkcert": "^2.1.0"
   }
 }

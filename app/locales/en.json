@@ -1,0 +1,41 @@
+{
+  "common": {
+    "logo": "Logo",
+    "new": "New"
+  },
+  "nav": {
+    "allGames": "All Games",
+    "slots": "Slots",
+    "crash": "Crash"
+  },
+  "aria": {
+    "lobbyNavigation": "Lobby navigation",
+    "lobbyCategories": "Lobby categories",
+    "gameLobby": "Game lobby",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "closeGame": "Close game",
+    "backToGame": "Back to {title}"
+  },
+  "lobby": {
+    "selectTitle": "Select a title to launch",
+    "layoutGrid": "Grid",
+    "layoutList": "List"
+  },
+  "gameCard": {
+    "playNow": "Play Now"
+  },
+  "categories": {
+    "slots": "Slots",
+    "crash": "Crash"
+  },
+  "profile": {
+    "player": "Player"
+  },
+  "wallet": {
+    "balance": "Wallet Balance"
+  },
+  "runningGame": {
+    "backToGame": "Back to game"
+  }
+}
