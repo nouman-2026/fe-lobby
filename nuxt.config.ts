@@ -3,6 +3,7 @@
 
 import mkcert from 'vite-plugin-mkcert'
 import path from 'path'
+import { version as appVersion } from './package.json'
 
 function resolveCdnOrigin(url: string) {
   if (!url) return ''
@@ -29,10 +30,26 @@ const cdnOrigin = resolveCdnOrigin(cdnUrl)
 const cdnHostname = resolveCdnHostname(cdnUrl)
 
 export default defineNuxtConfig({
+  app: {
+    baseURL: '/lobby/',
+    head: {
+      link: cdnOrigin ? [{ rel: 'preconnect', href: cdnOrigin }] : [],
+    },
+  },
+  routeRules: {
+    '/**': {
+      headers: {
+        'X-Frame-Options': 'ALLOWALL',
+        'Content-Security-Policy': "frame-ancestors 'self' *",
+      },
+    },
+  },
   runtimeConfig: {
     public: {
-      nuxtPublicBaseUrl: process.env.NUXT_PUBLIC_BASE_URL,
+      /** Local fixed API base (`NUXT_PUBLIC_API_BASE`). Production uses the page host. */
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || '',
       nuxtPublicCdnUrl: cdnUrl,
+      appVersion,
     },
   },
   devtools: { enabled: false },
@@ -66,11 +83,6 @@ export default defineNuxtConfig({
           },
         },
       },
-    },
-  },
-  app: {
-    head: {
-      link: cdnOrigin ? [{ rel: 'preconnect', href: cdnOrigin }] : [],
     },
   },
   icon: {

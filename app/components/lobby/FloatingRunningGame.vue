@@ -6,6 +6,15 @@ const game = computed(() =>
   settings.activeGameId ? catalog.getGameById(settings.activeGameId) : null
 )
 
+const thumbFailed = ref(false)
+
+watch(
+  () => game.value?.thumbnail,
+  () => {
+    thumbFailed.value = false
+  }
+)
+
 function onResume() {
   settings.resumeGame()
 }
@@ -39,11 +48,19 @@ function onClose(event: Event) {
             class="relative h-14 w-11 shrink-0 overflow-hidden rounded-lg bg-zinc-900 ring-1 ring-zinc-800"
           >
             <img
+              v-if="!thumbFailed"
               :src="game.thumbnail"
               :alt="game.title"
               class="h-full w-full object-cover"
               loading="lazy"
+              @error="thumbFailed = true"
             />
+            <span
+              v-else
+              class="flex h-full w-full items-center justify-center bg-zinc-900 px-0.5 text-center text-[7px] font-medium leading-tight text-zinc-500"
+            >
+              Preview not available
+            </span>
             <span
               class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"
             />

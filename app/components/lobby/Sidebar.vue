@@ -3,8 +3,10 @@ import type { GameCategory } from '~/stores/useSettingsStore'
 import { sidebarNavItems } from '~/data/games'
 
 const settings = useSettingsStore()
+const config = useRuntimeConfig()
 
 const navItems = sidebarNavItems
+const appVersion = config.public.appVersion
 
 function isActive(category: GameCategory) {
   return settings.activeCategory === category && settings.lobbyOpen
@@ -64,11 +66,7 @@ function onBackdropClick() {
       </button>
     </div>
 
-    <div class="px-3 pb-4">
-      <LobbyUserProfile />
-    </div>
-
-    <nav class="flex flex-1 flex-col gap-1 overflow-y-auto px-2">
+    <nav class="mt-2 flex flex-1 flex-col gap-1 overflow-y-auto px-2">
       <button
         v-for="item in navItems"
         :key="item.id"
@@ -93,6 +91,9 @@ function onBackdropClick() {
 
     <div class="mt-auto border-t border-zinc-800/80 px-3 py-4">
       <LobbyWalletBalance />
+      <p class="mt-3 text-center text-[10px] font-medium text-zinc-600">
+        v{{ appVersion }}
+      </p>
     </div>
   </aside>
 

@@ -1,3 +1,5 @@
+import { resolveApiBase } from '~/utils/apiBase'
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -28,7 +30,10 @@ function buildUrl(baseUrl: string, path: string, query?: QueryParams) {
 
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const baseUrl = String(config.public.nuxtPublicBaseUrl)
+
+  function getBaseUrl() {
+    return resolveApiBase(String(config.public.apiBase ?? ''))
+  }
 
   async function request<T>(
     method: 'GET' | 'POST',
@@ -39,7 +44,7 @@ export const useApi = () => {
     }
   ): Promise<T> {
     try {
-      return await $fetch<T>(buildUrl(baseUrl, path, options?.query), {
+      return await $fetch<T>(buildUrl(getBaseUrl(), path, options?.query), {
         method,
         body: options?.body,
       })
@@ -79,5 +84,5 @@ export const useApi = () => {
     return request<T>('POST', path, { query, body })
   }
 
-  return { get, post }
+  return { get, post, getBaseUrl }
 }

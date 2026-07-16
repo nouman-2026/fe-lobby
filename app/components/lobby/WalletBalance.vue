@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import { formatWalletBalance } from '~/utils/formatBalance'
+
 defineProps<{
   variant?: 'card' | 'pill'
 }>()
 
-const walletBalance = '₺ 38,763.30'
+const session = useSessionStore()
+
+const walletBalance = computed(() =>
+  formatWalletBalance(session.balance, session.currency)
+)
 </script>
 
 <template>

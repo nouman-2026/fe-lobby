@@ -9,6 +9,14 @@ const props = defineProps<{
 }>()
 
 const iframeRef = ref<HTMLIFrameElement | null>(null)
+const iframeLoading = ref(true)
+
+watch(
+  () => props.src,
+  () => {
+    iframeLoading.value = true
+  }
+)
 
 function syncSession() {
   if (props.sessionVisible == null) return
@@ -38,17 +46,46 @@ watch(
 )
 
 function onLoad() {
+  iframeLoading.value = false
   syncSession()
 }
 </script>
 
 <template>
-  <iframe
-    ref="iframeRef"
-    :src="src"
-    :title="title"
-    class="h-full w-full min-h-0 border-0 bg-black"
-    allow="fullscreen"
-    @load="onLoad"
-  />
+  <div class="relative h-full w-full min-h-0">
+    <iframe
+      ref="iframeRef"
+      :src="src"
+      :title="title"
+      class="h-full w-full min-h-0 border-0 bg-black"
+      allow="fullscreen"
+      @load="onLoad"
+    />
+
+    <Transition name="game-frame-loader">
+      <div
+        v-if="iframeLoading"
+        class="pointer-events-none absolute inset-0 z-[1] flex items-center justify-center bg-black"
+        role="status"
+        aria-live="polite"
+        aria-label="Preparing game"
+      >
+        <Icon
+          name="mdi:loading"
+          size="48"
+          class="animate-spin text-amber-400"
+        />
+      </div>
+    </Transition>
+  </div>
 </template>
+
+<style scoped>
+.game-frame-loader-leave-active {
+  transition: opacity 0.35s ease;
+}
+
+.game-frame-loader-leave-to {
+  opacity: 0;
+}
+</style>

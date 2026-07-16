@@ -1,4 +1,3 @@
-import { resolveGameLaunchUrl } from '~/utils/gameLaunchUrl'
 import {
   readPersistedGameSession,
   writePersistedGameSession,
@@ -13,10 +12,10 @@ export const useSettingsStore = defineStore('settings', () => {
   const lobbyOpen = ref(true)
   const activeCategory = ref<GameCategory>('all')
   const activeGameId = ref<string | null>(null)
-  /** Set once on page load — e.g. `https://play.example.com` or `http://localhost:4500`. */
-  const lobbyOrigin = ref('')
   /** Prepared on openGame — single source of truth for the iframe src. */
   const activeGameLaunchUrl = ref<string | null>(null)
+  const gameLaunchLoading = ref(false)
+  const gameLaunchError = ref<string | null>(null)
   /** Game iframe stays mounted but hidden while browsing the lobby. */
   const gameMinimized = ref(false)
   /** False until client mount finishes — keeps SSR and first client render in sync. */
@@ -30,7 +29,10 @@ export const useSettingsStore = defineStore('settings', () => {
 
   const gameFullscreen = computed(
     () =>
-      clientReady.value && activeGameId.value != null && !gameMinimized.value
+      clientReady.value &&
+      activeGameId.value != null &&
+      !gameMinimized.value &&
+      !!activeGameLaunchUrl.value
   )
 
   function syncPersistedGameSession() {
@@ -45,11 +47,6 @@ export const useSettingsStore = defineStore('settings', () => {
       gameId: activeGameId.value,
       minimized: gameMinimized.value,
     })
-  }
-
-  function initLobbyOrigin() {
-    if (import.meta.server) return
-    lobbyOrigin.value = window.location.origin
   }
 
   function setLayoutMode(mode: LayoutMode) {
@@ -124,17 +121,42 @@ export const useSettingsStore = defineStore('settings', () => {
     lobbyOpen.value = !lobbyOpen.value
   }
 
-  function openGame(gameId: string) {
-    if (!lobbyOrigin.value) initLobbyOrigin()
+  async function resolveLaunchUrl(gameId: string): Promise<string | null> {
+    const session = useSessionStore()
 
+    gameLaunchLoading.value = true
+    gameLaunchError.value = null
+    activeGameLaunchUrl.value = null
+
+    try {
+      const launchUrl = await session.requestLaunchUrl(gameId)
+      activeGameLaunchUrl.value = launchUrl
+      return launchUrl
+    } catch (error: unknown) {
+      gameLaunchError.value =
+        error instanceof Error ? error.message : 'Failed to launch game'
+      return null
+    } finally {
+      gameLaunchLoading.value = false
+    }
+  }
+
+  async function openGame(gameId: string) {
     const catalog = useCatalogStore()
     const game = catalog.getGameById(gameId)
     if (!game) return
 
     activeGameId.value = gameId
-    activeGameLaunchUrl.value = resolveGameLaunchUrl(game, lobbyOrigin.value)
     gameMinimized.value = false
     closeMobileSidebar()
+
+    const launchUrl = await resolveLaunchUrl(gameId)
+    if (!launchUrl) {
+      activeGameId.value = null
+      syncPersistedGameSession()
+      return
+    }
+
     syncPersistedGameSession()
   }
 
@@ -142,15 +164,15 @@ export const useSettingsStore = defineStore('settings', () => {
    * Re-apply a tab-refreshed game session. Reads sessionStorage directly so
    * SSR-hydrated Pinia defaults cannot wipe an in-progress game.
    */
-  function restoreGameSession() {
+  async function restoreGameSession() {
     if (import.meta.server) return
-    if (!lobbyOrigin.value) initLobbyOrigin()
 
     const persisted = readPersistedGameSession()
     if (!persisted) {
       activeGameId.value = null
       activeGameLaunchUrl.value = null
       gameMinimized.value = false
+      gameLaunchError.value = null
       return
     }
 
@@ -163,7 +185,11 @@ export const useSettingsStore = defineStore('settings', () => {
 
     activeGameId.value = persisted.gameId
     gameMinimized.value = persisted.minimized
-    activeGameLaunchUrl.value = resolveGameLaunchUrl(game, lobbyOrigin.value)
+
+    const launchUrl = await resolveLaunchUrl(persisted.gameId)
+    if (!launchUrl) {
+      closeGame()
+    }
   }
 
   function minimizeGame() {
@@ -183,22 +209,24 @@ export const useSettingsStore = defineStore('settings', () => {
     activeGameId.value = null
     activeGameLaunchUrl.value = null
     gameMinimized.value = false
+    gameLaunchLoading.value = false
+    gameLaunchError.value = null
     syncPersistedGameSession()
   }
 
   return {
     layoutMode,
     lobbyOpen,
-    lobbyOrigin,
     activeCategory,
     activeGameId,
     activeGameLaunchUrl,
+    gameLaunchLoading,
+    gameLaunchError,
     gameMinimized,
     clientReady,
     mobileSidebarOpen,
     hasRunningGame,
     gameFullscreen,
-    initLobbyOrigin,
     setLayoutMode,
     restoreLayoutPreference,
     finalizeClientHydration,

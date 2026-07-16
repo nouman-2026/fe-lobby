@@ -18,21 +18,32 @@ const emit = defineEmits<{
 }>()
 
 const loaded = ref(false)
+const failed = ref(false)
 const imgRef = ref<HTMLImageElement | null>(null)
 
 function markLoaded() {
   loaded.value = true
 }
 
+function onImageError() {
+  failed.value = true
+  markLoaded()
+}
+
 function syncLoadedState() {
   if (!props.game.thumbnail) {
+    failed.value = true
     markLoaded()
     return
   }
 
   const img = imgRef.value
-  if (img?.complete && img.naturalWidth > 0) {
-    markLoaded()
+  if (img?.complete) {
+    if (img.naturalWidth > 0) {
+      markLoaded()
+    } else {
+      onImageError()
+    }
   }
 }
 
@@ -40,6 +51,7 @@ watch(
   () => props.game.thumbnail,
   () => {
     loaded.value = false
+    failed.value = false
     nextTick(syncLoadedState)
   }
 )
@@ -97,6 +109,7 @@ function onSelect() {
         </Transition>
 
         <img
+          v-if="!failed"
           ref="imgRef"
           :src="game.thumbnail"
           :alt="game.title"
@@ -107,8 +120,18 @@ function onSelect() {
           :loading="eager ? 'eager' : 'lazy'"
           decoding="async"
           @load="onImageLoad"
-          @error="markLoaded"
+          @error="onImageError"
         />
+
+        <div
+          v-else
+          class="absolute inset-0 z-[1] flex flex-col items-center justify-center gap-1 bg-zinc-900 px-1 text-center"
+        >
+          <Icon name="mdi:image-off-outline" size="18" class="text-zinc-600" />
+          <span class="text-[8px] font-medium leading-tight text-zinc-500">
+            Preview not available
+          </span>
+        </div>
 
         <div
           class="absolute inset-0 z-[3] flex items-center justify-center bg-black/50 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100"
@@ -152,6 +175,7 @@ function onSelect() {
         </Transition>
 
         <img
+          v-if="!failed"
           ref="imgRef"
           :src="game.thumbnail"
           :alt="game.title"
@@ -162,8 +186,18 @@ function onSelect() {
           :loading="eager ? 'eager' : 'lazy'"
           decoding="async"
           @load="onImageLoad"
-          @error="markLoaded"
+          @error="onImageError"
         />
+
+        <div
+          v-else
+          class="absolute inset-0 z-[1] flex flex-col items-center justify-center gap-2 bg-zinc-900 px-3 text-center"
+        >
+          <Icon name="mdi:image-off-outline" size="32" class="text-zinc-600" />
+          <span class="text-[11px] font-medium leading-tight text-zinc-500">
+            Preview not available
+          </span>
+        </div>
 
         <div
           class="pointer-events-none absolute inset-0 z-[3] ring-1 ring-inset ring-white/10 transition duration-300 group-hover:ring-amber-400/30"

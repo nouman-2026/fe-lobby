@@ -3,6 +3,9 @@ import type { CatalogFilter, Game } from '~/data/games'
 import { CATALOG_TARGET_CARDS } from '~/constants/catalogGrid'
 import { resolveGameImageUrl } from '~/utils/gameImageUrl'
 
+/** Catalog pinia cache TTL — after this, a refresh fetches a fresh copy. */
+const CATALOG_CACHE_TTL_MS = 30 * 60 * 1000
+
 interface CategoryCache {
   games: Game[]
   pagination: Pagination
@@ -10,6 +13,11 @@ interface CategoryCache {
   loadingMore: boolean
   error: string | null
   initialized: boolean
+}
+
+interface PersistedCatalogPayload {
+  state: { gamesByCategory: Record<string, CategoryCache> }
+  cachedAt: number
 }
 
 function createEmptyPagination(pageSize = CATALOG_TARGET_CARDS): Pagination {
@@ -40,8 +48,6 @@ function toApiCategory(filter: CatalogFilter): string | undefined {
       return 'slot'
     case 'crash':
       return 'crash'
-    case 'new':
-      return 'new'
     default:
       return filter
   }
@@ -60,7 +66,6 @@ function mapApiGameToGame(apiGame: ApiGame): Game {
     slug: apiGame.game_id,
     thumbnail: resolveGameImageUrl(apiGame.background_image),
     category: toUiCategory(apiGame.category),
-    isNew: apiGame.order >= 80,
     provider: '',
     status: 'active',
   }
@@ -249,6 +254,38 @@ export const useCatalogStore = defineStore(
   {
     persist: {
       pick: ['gamesByCategory'],
+      serializer: {
+        serialize(data) {
+          const payload: PersistedCatalogPayload = {
+            state: data as PersistedCatalogPayload['state'],
+            cachedAt: Date.now(),
+          }
+          return JSON.stringify(payload)
+        },
+        deserialize(raw) {
+          try {
+            const parsed = JSON.parse(raw) as PersistedCatalogPayload & {
+              gamesByCategory?: Record<string, CategoryCache>
+            }
+
+            // New TTL-aware format
+            if (
+              parsed.state?.gamesByCategory &&
+              typeof parsed.cachedAt === 'number'
+            ) {
+              if (Date.now() - parsed.cachedAt > CATALOG_CACHE_TTL_MS) {
+                return { gamesByCategory: {} }
+              }
+              return parsed.state
+            }
+
+            // Legacy format without TTL — force a fresh fetch
+            return { gamesByCategory: {} }
+          } catch {
+            return { gamesByCategory: {} }
+          }
+        },
+      },
       afterHydrate(ctx) {
         const store = ctx.store as unknown as {
           gamesByCategory: Record<string, CategoryCache>

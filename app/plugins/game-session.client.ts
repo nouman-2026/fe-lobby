@@ -4,11 +4,15 @@
 export default defineNuxtPlugin({
   name: 'game-session-restore',
   setup(nuxtApp) {
-    nuxtApp.hook('app:mounted', () => {
+    nuxtApp.hook('app:mounted', async () => {
+      const session = useSessionStore()
       const settings = useSettingsStore()
-      settings.initLobbyOrigin()
+
+      session.initFromUrl()
       settings.restoreLayoutPreference()
-      settings.restoreGameSession()
+
+      await Promise.all([session.fetchPlayer(), settings.restoreGameSession()])
+
       settings.finalizeClientHydration()
     })
   },
