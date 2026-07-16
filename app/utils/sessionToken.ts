@@ -1,10 +1,14 @@
-const DEFAULT_SESSION_TOKEN = 'EXAMPLE'
-
+/**
+ * Read `session_id` from the page URL. Empty when missing (no placeholder fallback).
+ */
 export function getSessionTokenFromUrl(): string {
-  if (import.meta.server) return DEFAULT_SESSION_TOKEN
+  if (import.meta.server) return ''
 
   return (
-    new URLSearchParams(window.location.search).get('session_id') ??
-    DEFAULT_SESSION_TOKEN
+    new URLSearchParams(window.location.search).get('session_id')?.trim() ?? ''
   )
+}
+
+export function hasSessionToken(token: string | null | undefined): boolean {
+  return Boolean(token?.trim())
 }

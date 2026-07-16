@@ -3,7 +3,7 @@ import type {
   PlayerResponse,
   PlayerSession,
 } from '~/types/session'
-import { getSessionTokenFromUrl } from '~/utils/sessionToken'
+import { getSessionTokenFromUrl, hasSessionToken } from '~/utils/sessionToken'
 
 export const useSessionStore = defineStore('session', () => {
   const sessionToken = ref<string>(getSessionTokenFromUrl())
@@ -12,6 +12,7 @@ export const useSessionStore = defineStore('session', () => {
   const error = ref<string | null>(null)
   const initialized = ref(false)
 
+  const hasSession = computed(() => hasSessionToken(sessionToken.value))
   const operator = computed(() => session.value?.operator ?? '')
   const balance = computed(() => session.value?.balance ?? 0)
   const currency = computed(() => session.value?.currency ?? 'USD')
@@ -24,6 +25,14 @@ export const useSessionStore = defineStore('session', () => {
 
   async function fetchPlayer() {
     if (import.meta.server) return
+
+    if (!hasSessionToken(sessionToken.value)) {
+      session.value = null
+      error.value = null
+      initialized.value = true
+      loading.value = false
+      return
+    }
 
     loading.value = true
     error.value = null
@@ -45,6 +54,12 @@ export const useSessionStore = defineStore('session', () => {
   }
 
   async function requestLaunchUrl(gameId: string): Promise<string> {
+    if (!hasSessionToken(sessionToken.value)) {
+      throw new Error(
+        'Missing session_id — open the lobby with a valid session'
+      )
+    }
+
     const api = useApi()
     const response = await api.post<LaunchResponse>('/launch', {
       session_id: sessionToken.value,
@@ -64,6 +79,7 @@ export const useSessionStore = defineStore('session', () => {
     loading,
     error,
     initialized,
+    hasSession,
     operator,
     balance,
     currency,
